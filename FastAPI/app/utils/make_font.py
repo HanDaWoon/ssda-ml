@@ -18,10 +18,11 @@ from dmfont.train import (
 from dmfont import utils
 
 
-def make_font():
+def make_font(name):
     cfg = Config("./dmfont/cfgs/kor_custom.yaml")
     logger = Logger.get()
     cfg['data_dir'] = Path(cfg['data_dir'])
+    cfg['name'] = name
     np.random.seed(cfg['seed'])
     torch.manual_seed(cfg['seed'])
     random.seed(cfg['seed'])
@@ -74,7 +75,7 @@ def make_font():
     style_chars = meta['style_chars']
     fonts = meta['train']['fonts']
     logger.info("Start generation & saving kor-unrefined ...")
-    save_dir = Path(cfg['img_dir']) / "{}-{}".format(cfg['name'], step)
+    save_dir = Path(cfg['img_dir'])
     evaluator.handwritten_validation_2stage(
       gen,step, fonts, style_chars, target_chars, comparable=True, save_dir=save_dir
     )

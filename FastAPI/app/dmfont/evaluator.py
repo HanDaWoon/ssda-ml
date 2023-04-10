@@ -285,21 +285,21 @@ class Evaluator:
                     path.parent.mkdir(parents=True, exist_ok=True)
                     utils.save_tensor_to_image(glyph, path)
 
-        if save_dir:  # do not write grid
-            return
+        # if save_dir:  # do not write grid
+        #     return
 
-        out = torch.cat(outs)
-        if comparable:
-            # ref original chars
-            refs = self.get_charimages(fonts, target_chars)
+        # out = torch.cat(outs)
+        # if comparable:
+        #     # ref original chars
+        #     refs = self.get_charimages(fonts, target_chars)
 
-            nrow = len(target_chars)
-            grid = utils.make_comparable_grid(refs, out, nrow=nrow)
-        else:
-            grid = utils.to_grid(out, 'torch', nrow=len(target_chars))
+        #     nrow = len(target_chars)
+        #     grid = utils.make_comparable_grid(refs, out, nrow=nrow)
+        # else:
+        #     grid = utils.to_grid(out, 'torch', nrow=len(target_chars))
 
-        tag = tag + target_chars[:4]
-        self.writer.add_image(tag, grid, global_step=step)
+        # tag = tag + target_chars[:4]
+        # self.writer.add_image(tag, grid, global_step=step)
 
     def get_inputimages(self, val_loader):
         # integrate style images

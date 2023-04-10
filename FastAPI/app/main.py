@@ -14,18 +14,19 @@ import os
 
 app = FastAPI()
 
-image_dir = "/home/software/CHJ/FastAPI/app/dmfont/output/CHJ-200000/CHJ"
+image_dir = "./dmfont/output/images"
 
 
 @app.get("/")
 async def root():
     return {"message": "Hello, World!"}
 
-
-@app.get("/font_generation/images")
-async def font_generation():
-    make_font()
-    image_paths = glob(os.path.join(image_dir,"*.png"))
+# TODO: 나중에는 이 name이 uuid 같은 hash 값으로 변경되면 됨.
+@app.get("/font_generation/images/{name}") 
+async def font_generation(name:str):
+    make_font(name)
+    print(os.path.abspath(image_dir))
+    image_paths = glob(os.path.join(image_dir , name,"*.png"))
     print(image_paths[:5])
     img_list = {}
     
@@ -33,24 +34,14 @@ async def font_generation():
         char_name = str(image_path.split('_')[-1][:4])
         img_list[char_name] = from_image_to_bytes(Image.open(image_path))
     return JSONResponse(img_list)
+  
 
-@app.get("/font_generation/png2svg")
-async def svg_translation():
-    png2svg()    
-
-@app.get("/font_generation/png2svgs")
-async def svg_translation():
-    png2svgs()  
+@app.get("/font_generation/png2svg/{name}")
+async def svg_translation(name: str):
+    png2svg(name)
+    return {"message" : "Success"}  
 
 
     
-@app.get("/svg_images")
-async def get_svg_images():
-    svg_images = {
-        "image1": "<svg viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='red'/></svg>",
-        "image2": "<svg viewBox='0 0 100 100'><rect x='10' y='10' width='80' height='80' fill='blue'/></svg>",
-        "image3": "<svg viewBox='0 0 100 100'><ellipse cx='50' cy='50' rx='40' ry='30' fill='green'/></svg>"
-    }
-    return JSONResponse(svg_images)
     
 
