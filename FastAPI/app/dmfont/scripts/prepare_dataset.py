@@ -44,7 +44,6 @@ def dump_to_hdf5(dump_path, font_name, images, chars, compression=None):
         dset.create_dataset('images', (N, 128, 128), np.uint8, compression=compression,
                             data=np.stack(images))
         data = np.array(chars)
-        print(data.shape, -"data")
         dset.create_dataset('chars', data.shape, np.int32, compression=compression,
                             data=np.array(chars))
 
@@ -74,7 +73,6 @@ class FontProcessor(object):
             raise ValueError(self.language)
 
     def is_renderable_char(self, font, ch):
-        # Rendering이 가능한 Font인지 검사하는 함수(.ttf -> Image)
         ch = self.fix_char_order_if_thai(ch)
         try:
             size = reduce(lambda x, y: x * y, font.getsize(ch))
@@ -104,9 +102,6 @@ class FontProcessor(object):
         return size_x-offset_x, size_y-offset_y
 
     def render_center_no_offset(self, char, font, fontmaxsize, size=128, margin=0):
-        # 이 함수를 이용해 .ttf로 새로운 image를 생성함.
-        # 그런데 우리는 image를 생성하는게 아니라 이미 있는 걸 활용해야 하므로
-        # 글자를 중간에 오도록 하는 작업이 필요할 듯 함.
         char = self.fix_char_order_if_thai(char)
         size_x, size_y = font.getsize(char)
         offset_x, offset_y = font.getoffset(char)
@@ -172,10 +167,9 @@ class FontProcessor(object):
                 continue
 
             font = ImageFont.truetype(targetfontpath, self.font_size)
-            codepoints = self.avail_chars(targetfontpath, font) # 여기서 가능한 char들이 튀어나옴.
+            codepoints = self.avail_chars(targetfontpath, font)
             # available & desired fonts
             codepoints = codepoints & self.targetcodes  # avail chars
-            # 이건 바로 출력 가능한 character들.
             if self.language == 'kor':
                 if len(codepoints) == 0:
                     self.logger.error("Font {} don't have any valid chars".format(targetfontname))
@@ -238,7 +232,7 @@ def main(language, fonts_dir, meta_path, dump_dir):
     meta = json.load(open(meta_path))
     allfonts = set(meta['train']['fonts'] + meta['valid']['fonts'])
     fonts = [
-        str(fname)for fname in fonts_dir.rglob("*.ttf") if fname.name in allfonts
+        str(fname) for fname in fonts_dir.rglob("*.ttf") if fname.name in allfonts
     ]
     assert len(allfonts) == len(fonts)
 

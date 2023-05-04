@@ -1,7 +1,5 @@
 *.pkl
 .ipynb_checkpoints
-*.ipynb
-*.png
 backups/
 runs/
 __pycache__/
@@ -14,10 +12,3 @@ runs-back/
 tags*
 test*
 
-checkpoints
-data
-production
-runs
-fonts
-test_cv/
-test_us/

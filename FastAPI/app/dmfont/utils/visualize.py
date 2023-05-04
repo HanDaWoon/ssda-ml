@@ -28,7 +28,6 @@ def make_merged_grid(batchs, merge_dim, **kwargs):
 
 
 def make_comparable_grid(*batches, nrow):
-    print([(len(batches[0]), len(batch))for batch in batches[1:]])
     assert all(len(batches[0]) == len(batch) for batch in batches[1:])
     N = len(batches[0])
 

@@ -1,27 +1,31 @@
+import sys
+sys.path.append("./dmfont")
+print(sys.path)
 import numpy as np
 import requests
 import json
 import torch
-from dmfont.models import MACore
+from models import MACore
 from sconf import Config
 from pathlib import Path
 import numpy as np
 import random
-from dmfont.evaluator import Evaluator
+from evaluator import Evaluator
 from torchvision import transforms
 
-from dmfont.logger import Logger
-from dmfont.train import (
+from logger import Logger
+from train import (
         setup_language_dependent, setup_data, setup_cv_dset_loader,
         get_dset_loader
     )
 from dmfont import utils
+import os
 
 
 def make_font(name):
     cfg = Config("./dmfont/cfgs/kor_custom.yaml")
     logger = Logger.get()
-    cfg['data_dir'] = Path(cfg['data_dir'])
+    cfg['data_dir'] = Path(os.path.join(cfg['data_dir'], cfg['name']))
     cfg['name'] = name
     np.random.seed(cfg['seed'])
     torch.manual_seed(cfg['seed'])
@@ -48,10 +52,8 @@ def make_font(name):
     )
     
     # setup dataset
-    
     g_kwargs = cfg.get('g_args', {})    
     gen = MACore(1, cfg['C'], 1, **g_kwargs, n_comps=n_comps, n_comp_types=n_comp_types, language=cfg['language'])
-    print(torch.cuda.is_available(), "- isavaliable")
     gen.cuda()
     
     torch.cuda.empty_cache()
@@ -63,7 +65,7 @@ def make_font(name):
     loss = ckpt['loss']
     logger.info("Resumed checkpoint from {} (Step {}, Loss {:7.3f})".format(cfg['resume'], step, loss))
     
-    writer = utils.DiskWriter(cfg['img_dir']) # ./output에 sample image를 저장함.
+    writer = utils.DiskWriter(os.path.join(cfg['save_dir'], cfg['name'])) # ./output에 sample image를 저장함.
     
     evaluator = Evaluator(
         hdf5_data, trn_dset.avails, logger, writer, cfg['batch_size'],
@@ -75,7 +77,10 @@ def make_font(name):
     style_chars = meta['style_chars']
     fonts = meta['train']['fonts']
     logger.info("Start generation & saving kor-unrefined ...")
-    save_dir = Path(cfg['img_dir'])
+    save_dir = Path(cfg['save_dir'])
     evaluator.handwritten_validation_2stage(
       gen,step, fonts, style_chars, target_chars, comparable=True, save_dir=save_dir
     )
+    
+if __name__ == "__main__":
+    make_font("CHJ")

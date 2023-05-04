@@ -18,7 +18,6 @@ class Sampler:
 
     def get(self, key, ex_values=None, ret_values=False):
         """ Random sampling """
-        # print(self.avails)
         values = self.avails[key]
         values = sample(values, self.R, ex_values)
         images = torch.cat([self.get_item(key, value) for value in values])

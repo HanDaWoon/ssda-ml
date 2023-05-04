@@ -4,7 +4,7 @@ Copyright (c) 2020-present NAVER Corp.
 MIT license
 """
 import unicodedata
-COMPONENT_RANGE = (int('3130', 16), int('3164', 16))  # kr 자음/모음
+COMPONENT_RANGE = (int('3131', 16), int('3163', 16))  # kr 자음/모음
 COMPLETE_RANGE = (int('ac00', 16), int('d7a3', 16))   # kr all complete chars
 COMPLETE_SET = frozenset(chr(code) for code in range(COMPLETE_RANGE[0], COMPLETE_RANGE[1]+1))
 COMPLETE_LIST = sorted(COMPLETE_SET)
@@ -41,8 +41,6 @@ def decompose(char):
         char_code -= COMPONENT_RANGE[0]
         raise ValueError('Component only ({})'.format(char))
     else:
-        print(char == 'ㅊ', " -- char == ㅊ")
-        print(hex(ord(char)), ord(char), len(char), char, "ord-char")
         raise ValueError('{} is Non kor'.format(char))
 
     return char_id

@@ -21,7 +21,7 @@ def rev_dict(l):
 def uniform_indices(end, n_sample, st=None):
     """ Sample from [0, end) with (almost) equidistant interval """
     if end <= 0:
-        return np.empty(0, dtype=np.int32)
+        return np.empty(0, dtype=np.int)
 
     # NOTE with endpoint=False, np.linspace does not sample the `end` value
     indices = np.linspace(0, end, num=n_sample, dtype=np.int32, endpoint=False)

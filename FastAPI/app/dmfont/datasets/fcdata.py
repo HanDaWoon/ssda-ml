@@ -89,6 +89,7 @@ class HDF5Data(FCData):
         if default is not None:
             if not self.is_avail(font_name, char):
                 return default
+
         path = self.fn2path[font_name]
 
         with h5.File(path, 'r') as f:

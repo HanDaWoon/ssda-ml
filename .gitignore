@@ -47,6 +47,6 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
-*.svg
-*.png
+# *.svg
+# *.png
 

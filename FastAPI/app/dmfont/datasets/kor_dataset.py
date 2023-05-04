@@ -3,7 +3,6 @@ DMFont
 Copyright (c) 2020-present NAVER Corp.
 MIT license
 """
-import sys
 import random
 from itertools import product
 
@@ -14,7 +13,7 @@ from torch.utils.data import Dataset
 from .kor_decompose import decompose, compose, COMPLETE_SET
 from .samplers import StyleSampler
 from .data_utils import rev_dict, sample, get_fonts, get_union_chars
-import unicodedata
+
 
 class MAStyleFirstDataset(Dataset):
     """ Sampling style chars first and then generating target chars
@@ -50,9 +49,7 @@ class MAStyleFirstDataset(Dataset):
         self.n_avails = sum(len(chars) for chars in self.avails.values())
 
     def get_avail_chars(self, font_name, style_chars):
-        # print(self.avails[font_name], sorted(style_chars),"-avail, syle chars")
         avail_chars = set(self.avails[font_name])
-        
         avail_chars = avail_chars - set(style_chars)
 
         return avail_chars
@@ -76,7 +73,6 @@ class MAStyleFirstDataset(Dataset):
                 continue
 
             trg_comp_ids.append(ids)
-        print(trg_comp_ids, "-trg_comp_ids")
 
         return trg_comp_ids
 
@@ -97,22 +93,19 @@ class MAStyleFirstDataset(Dataset):
             # 1. sample styles
             ####################################################
             style_imgs, style_chars = self.style_sampler.get(font_name, ret_values=True)
-            print(style_imgs.shape, style_chars)
             style_comp_ids = [decompose(char) for char in style_chars]
-            # print(style_comp_ids, 'style_comp_ids')
             chos, jungs, jongs = list(map(set, zip(*style_comp_ids)))
 
             # fullcomb
             if not (len(chos) == len(jungs) == len(jongs) == self.R):
-                # print(len(chos),len(jungs),len(jongs), "chj len")
                 continue
+
             style_comp_ids = np.asarray(style_comp_ids)
 
             ####################################################
             # 2. sample targets from style components
             ####################################################
             avail_chars = self.get_avail_chars(font_name, style_chars)
-            # print(sorted(avail_chars), len(avail_chars))
             trg_comp_ids = self.get_component_combinations(
                 (chos, jungs, jongs), avail_chars, style_comp_ids
             )
@@ -120,7 +113,7 @@ class MAStyleFirstDataset(Dataset):
             trg_comp_ids = self.check_and_sample(trg_comp_ids)
             if trg_comp_ids is None:
                 continue
-            
+
             ####################################################
             # 3. setup chars, font_ids, char_ids and images
             ####################################################
@@ -129,7 +122,6 @@ class MAStyleFirstDataset(Dataset):
                 self.data.get(font_name, char, transform=self.transform)
                 for char in trg_chars
             ])
-            
 
             style_char_ids = [self.char2idx[ch] for ch in style_chars]
             trg_char_ids = [self.char2idx[ch] for ch in trg_chars]
@@ -228,14 +220,6 @@ class MATargetFirstDataset(Dataset):
         self.fonts = get_fonts(self.target_fc)
         self.chars = get_union_chars(self.target_fc)
         self.font2idx = {font_name: i for i, font_name in enumerate(self.target_fc.keys())}
-        # print(len(self.target_fc), " -- target-fc")
-        # print(len(self.style_avails), " -- style_avails")
-        # print(self.style_avail_comps_list, " -- style_avail_comps_list") # (9, 5, 17)
-        # print(self.n_max_match, " -- n_max_match") # 3  -- n_max_match
-        # print(self.ret_targets, " -- ret_targets") # True  -- ret_targets
-        # print(self.content_font, " -- content_font") # NanumBarunpenR.ttf  -- content_font
-        # print(self.style_data, " -- style_data") # HDF5  -- style_data
-        # print(self.fcs, " -- fcs") # ('UhBee charming.ttf', '올') 전체 set
 
     def sample_style_char(self, font_name, trg_char):
         """ sample style char from target char within avail style chars """
@@ -340,7 +324,7 @@ def get_ma_dataset(hdf5_data, avail_fonts, avail_chars=None, transform=None, **k
 
     avails = {}
     for fname in avail_fonts:
-        print(fname)
+        print(fname, "- fname")
         chars = hdf5_data.get_avail_chars(fname)
         if avail_chars:
             chars = set(chars) & avail_chars

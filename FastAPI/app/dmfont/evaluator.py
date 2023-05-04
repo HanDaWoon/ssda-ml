@@ -17,17 +17,17 @@ from tqdm import tqdm
 from sconf import Config
 
 from dmfont import utils
-from dmfont.logger import Logger
+from logger import Logger
 
-from dmfont.models import MACore
-from dmfont.datasets import uniform_sample
-from dmfont.datasets import kor_decompose as kor
-from dmfont.datasets import thai_decompose as thai
-from dmfont.inference import (
+from models import MACore
+from datasets import uniform_sample
+from datasets import kor_decompose as kor
+from datasets import thai_decompose as thai
+from inference import (
     infer, get_val_loader,
     infer_2stage, get_val_encode_loader, get_val_decode_loader
 )
-from dmfont.ssim import SSIM, MSSSIM
+from ssim import SSIM, MSSSIM
 
 
 def torch_eval(val_fn):
@@ -129,15 +129,12 @@ class Evaluator:
             B=self.batch_size, n_max_match=n_max_match, transform=self.transform,
             content_font=self.content_font, language=self.language, n_workers=self.n_workers
         )
-        print(self.batch_size, "BS")
         out = infer(gen, loader)  # [B, 1, 128, 128]
 
         # ref original chars
         refs = self.get_charimages(target_fonts, target_chars)
-        # print(refs.shape, "refs.shape")
-        # print(out.shape, "out.shape")
+
         compare_batches = [refs, out]
-        # print(np.shape(np.array(compare_batches)), "compare_batches.shape")
         if compare_inputs:
             compare_batches += self.get_inputimages(loader)
 
@@ -268,9 +265,8 @@ class Evaluator:
             save_dir.mkdir(parents=True, exist_ok=True)
 
         outs = []
-        # for font_name in tqdm(fonts):
+        print(fonts)
         for font_name in fonts:
-            print(font_name)
             encode_loader = get_val_encode_loader(
                 self.data, font_name, style_chars, self.language, self.transform
             )
@@ -285,21 +281,21 @@ class Evaluator:
                     path.parent.mkdir(parents=True, exist_ok=True)
                     utils.save_tensor_to_image(glyph, path)
 
-        # if save_dir:  # do not write grid
-        #     return
+        if save_dir:  # do not write grid
+            return
 
-        # out = torch.cat(outs)
-        # if comparable:
-        #     # ref original chars
-        #     refs = self.get_charimages(fonts, target_chars)
+        out = torch.cat(outs)
+        if comparable:
+            # ref original chars
+            refs = self.get_charimages(fonts, target_chars)
 
-        #     nrow = len(target_chars)
-        #     grid = utils.make_comparable_grid(refs, out, nrow=nrow)
-        # else:
-        #     grid = utils.to_grid(out, 'torch', nrow=len(target_chars))
+            nrow = len(target_chars)
+            grid = utils.make_comparable_grid(refs, out, nrow=nrow)
+        else:
+            grid = utils.to_grid(out, 'torch', nrow=len(target_chars))
 
-        # tag = tag + target_chars[:4]
-        # self.writer.add_image(tag, grid, global_step=step)
+        tag = tag + target_chars[:4]
+        self.writer.add_image(tag, grid, global_step=step)
 
     def get_inputimages(self, val_loader):
         # integrate style images
@@ -425,7 +421,7 @@ def eval_ckpt():
         hdf5_data, meta['train']['fonts'], meta['train']['chars'], transform, True, cfg,
         content_font=content_font
     )
-    # TODO : val_loader 역할?
+
     val_loaders = setup_cv_dset_loader(
         hdf5_data, meta, transform, n_comp_types, content_font, cfg
     )
@@ -469,7 +465,7 @@ def eval_ckpt():
         dic = evaluator.validation(gen, step)
         logger.info("Validation is done. Result images are saved to {}".format(args.img_dir))
     elif args.mode.startswith('user-study'):
-        meta = json.load(open('meta/kor-unrefined_custom.json'))
+        meta = json.load(open('meta/kor-unrefined.json'))
         target_chars = meta['target_chars']
         style_chars = meta['style_chars']
         fonts = meta['fonts']

@@ -16,15 +16,15 @@ from torchvision import transforms
 import numpy as np
 from sconf import Config, dump_args
 
-from dmfont.logger import Logger
-from dmfont.models import MACore, Discriminator, AuxClassifier
-from dmfont.models.modules import weights_init
-from dmfont.datasets import HDF5Data, get_ma_dataset, get_ma_val_dataset
-import dmfont.datasets.kor_decompose as kor
-import dmfont.datasets.thai_decompose as thai
-import dmfont.utils
-from dmfont.trainer import Trainer, load_checkpoint
-from dmfont.evaluator import Evaluator
+from logger import Logger
+from models import MACore, Discriminator, AuxClassifier
+from models.modules import weights_init
+from datasets import HDF5Data, get_ma_dataset, get_ma_val_dataset
+from datasets import kor_decompose as kor
+from datasets import thai_decompose as thai
+from dmfont import utils
+from trainer import Trainer, load_checkpoint
+from evaluator import Evaluator
 
 
 def get_dset_loader(data, avail_fonts, avail_chars, transform, shuffle, cfg, content_font=None):
@@ -139,7 +139,6 @@ def setup_cv_dset_loader(hdf5_data, meta, val_transform, n_comp_types, content_f
     n_workers = cfg['n_workers']
     n_max_match = n_comp_types  # for validation dset
     # seen fonts, unseen chars -> same as original unseen validation
-    # TODO : val dataset 이해하기
     sfuc_dset, sfuc_loader = get_val_dset_loader(
         hdf5_data, meta['train']['fonts'], meta['valid']['chars'], trn_chars, val_transform,
         batch_size, n_workers, n_max_match, content_font, cfg['language']
@@ -155,7 +154,7 @@ def setup_cv_dset_loader(hdf5_data, meta, val_transform, n_comp_types, content_f
         batch_size, n_workers, n_max_match, content_font, cfg['language']
     )
     # setup val_loaders
-    val_loaders = { # TODO : 이 코드의 의미는?
+    val_loaders = {
         "SeenFonts-UnseenChars": sfuc_loader,
         "UnseenFonts-SeenChars": ufsc_loader,
         "UnseenFonts-UnseenChars": ufuc_loader

@@ -10,10 +10,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import dmfont.utils
-from dmfont.datasets import cyclize
-from dmfont.models.memory import comp_id_to_addr
-from dmfont.criterions import hinge_g_loss, hinge_d_loss
+from dmfont import utils
+from datasets import cyclize
+from models.memory import comp_id_to_addr
+from criterions import hinge_g_loss, hinge_d_loss
 
 
 def has_bn(model):

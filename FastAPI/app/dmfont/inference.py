@@ -5,8 +5,8 @@ MIT license
 """
 import torch
 from torch.utils.data import DataLoader
-from dmfont.datasets import get_ma_val_dataset
-from dmfont.datasets.nonpaired_dataset import EncodeDataset, DecodeDataset
+from datasets import get_ma_val_dataset
+from datasets.nonpaired_dataset import EncodeDataset, DecodeDataset
 from tqdm.auto import tqdm
 
 def infer(gen, loader):
@@ -29,7 +29,6 @@ def infer(gen, loader):
 
 def get_val_loader(data, fonts, chars, style_avails, transform, content_font, language,
                    B=32, n_max_match=3, n_workers=2):
-    print(B, "loader's Batch size")
     val_dset, collate_fn = get_ma_val_dataset(
         data, fonts, chars, style_avails, n_max_match, transform=transform,
         content_font=content_font, language=language

@@ -8,7 +8,6 @@ from torch.utils.data import Dataset
 
 from . import kor_decompose as kor
 from . import thai_decompose as thai
-import unicodedata
 
 
 class EncodeDataset(Dataset):
@@ -28,7 +27,7 @@ class EncodeDataset(Dataset):
             raise ValueError(language)
 
     def __getitem__(self, index):
-        style_char = unicodedata.normalize('NFC', self.chars[index])
+        style_char = self.chars[index]
         style_comp_ids = self.decompose(style_char)
         style_img = self.data.get(self.fname, style_char, transform=self.transform)
 
