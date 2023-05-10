@@ -38,6 +38,7 @@ async def font_generation(name:str):
 
 @app.get("/font_generation/png2svg/{name}")
 async def svg_translation(name: str):
+    print(name)
     png2svg(name)
     return {"message" : "Success"}  
 

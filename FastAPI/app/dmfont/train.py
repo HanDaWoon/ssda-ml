@@ -22,7 +22,7 @@ from models.modules import weights_init
 from datasets import HDF5Data, get_ma_dataset, get_ma_val_dataset
 from datasets import kor_decompose as kor
 from datasets import thai_decompose as thai
-from dmfont import utils
+import utils
 from trainer import Trainer, load_checkpoint
 from evaluator import Evaluator
 

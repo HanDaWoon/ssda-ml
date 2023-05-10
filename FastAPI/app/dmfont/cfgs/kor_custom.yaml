@@ -3,7 +3,7 @@ data_dir: dmfont/data
 data_meta: dmfont/meta/kor_split_custom.json
 resume : dmfont/checkpoints/korean-handwriting.pth
 language: kor
-save_dir : dmfont/custom_generate_image
+save_dir : dmfont/custom_generate_image/
 name : CHJ
 batch_size: 12
 max_iter: 200000

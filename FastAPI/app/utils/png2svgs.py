@@ -4,12 +4,12 @@ from glob import glob
 from tqdm import tqdm
 from threading import Thread, Lock
 
-def png2svgs(image_path):
+def png2svgs(image_path, name):
     char_name = image_path.split("/")[-1][:8]
-    subprocess.run(["potracer", image_path, "-o", f"/home/software/CHJ/FastAPI/app/dmfont/output/SVGS/CHJ/{char_name}.svg"])
+    subprocess.run(["potracer", image_path, "-o", f"/home/software/CHJ/FastAPI/app/dmfont/output/SVGS/{name}/{char_name}.svg"])
 
 def png2svg_multithread():
-    image_dir = "/home/software/CHJ/FastAPI/app/dmfont/output/CHJ-200000/CHJ"
+    image_dir = "/home/software/CHJ/FastAPI/app/dmfont/custom_generate_image/{name}"
     images = glob(os.path.join(image_dir, "*.png"))
     lock = Lock()
 
