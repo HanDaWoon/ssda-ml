@@ -16,7 +16,7 @@ from torchvision import transforms
 from tqdm import tqdm
 from sconf import Config
 
-from dmfont import utils
+import utils
 from logger import Logger
 
 from models import MACore

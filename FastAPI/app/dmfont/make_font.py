@@ -20,7 +20,7 @@ import os
 
 
 def make_font(name):
-    cfg = Config("./cfgs/kor_custom.yaml")
+    cfg = Config("./cfgs/kor_custom_make_font.yaml")
     logger = Logger.get()
     cfg['data_dir'] = Path(os.path.join(cfg['data_dir'], cfg['name']))
     cfg['name'] = name
