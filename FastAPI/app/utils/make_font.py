@@ -34,7 +34,7 @@ def make_font(name):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     
     content_font, n_comp_types, n_comps = setup_language_dependent(cfg)
-    
+     
     # setup transform
     transform = transforms.Compose([
       transforms.ToTensor(),
