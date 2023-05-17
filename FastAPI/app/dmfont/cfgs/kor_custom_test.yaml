@@ -1,9 +1,9 @@
 # train
-data_dir: data
-data_meta: meta/kor_split_custom.json
-resume : checkpoints/korean-handwriting.pth
+data_dir: dmfont/data
+data_meta: dmfont/meta/kor_split_custom_test.json
+resume : dmfont/checkpoints/korean-handwriting.pth
 language: kor
-save_dir : custom_generate_image/
+save_dir : dmfont/custom_generate_image/
 name : CHJ
 batch_size: 12
 max_iter: 200000

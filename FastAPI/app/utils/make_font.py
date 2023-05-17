@@ -23,7 +23,8 @@ import os
 
 
 def make_font(name):
-    cfg = Config("./dmfont/cfgs/kor_custom.yaml")
+    # cfg = Config("./dmfont/cfgs/kor_custom.yaml") # Full Character Generation
+    cfg = Config("./dmfont/cfgs/kor_custom_test.yaml")
     logger = Logger.get()
     cfg['data_dir'] = Path(os.path.join(cfg['data_dir'], cfg['name']))
     cfg['name'] = name
