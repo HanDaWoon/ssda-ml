@@ -16,7 +16,7 @@ from torchvision import transforms
 from tqdm import tqdm
 from sconf import Config
 
-import utils
+from dmfont import utils
 from logger import Logger
 
 from models import MACore
@@ -278,7 +278,7 @@ class Evaluator:
                 for char, glyph in zip(target_chars, out):
                     uni = "".join([f'{ord(each):04X}' for each in char])
                     path = save_dir / font_name/ "png" / "{}_{}.png".format(font_name, uni)
-                    print(path, "-evaluator/path")
+                    print(path, " - evaluator/path")
                     path.parent.mkdir(parents=True, exist_ok=True)
                     utils.save_tensor_to_image(glyph, path)
 

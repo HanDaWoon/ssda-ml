@@ -30,6 +30,7 @@ def make_font(name):
     np.random.seed(cfg['seed'])
     torch.manual_seed(cfg['seed'])
     random.seed(cfg['seed'])
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     
     content_font, n_comp_types, n_comps = setup_language_dependent(cfg)
     
@@ -54,7 +55,7 @@ def make_font(name):
     # setup dataset
     g_kwargs = cfg.get('g_args', {})    
     gen = MACore(1, cfg['C'], 1, **g_kwargs, n_comps=n_comps, n_comp_types=n_comp_types, language=cfg['language'])
-    gen.cuda()
+    gen.to(device)
     
     torch.cuda.empty_cache()
     ckpt = torch.load(cfg['resume'])

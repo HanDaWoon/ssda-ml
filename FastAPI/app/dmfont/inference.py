@@ -65,7 +65,7 @@ def infer_2stage(gen, encode_loader, decode_loader, reset_memory=True):
     return torch.cat(outs)
 
 
-def get_val_encode_loader(data, font_name, encode_chars, language, transform, B=32, num_workers=2,
+def get_val_encode_loader(data, font_name, encode_chars, language, transform, B=32, num_workers=0,
                           style_id=0):
     encode_dset = EncodeDataset(
         font_name, encode_chars, data, language=language, transform=transform, style_id=style_id
@@ -75,7 +75,7 @@ def get_val_encode_loader(data, font_name, encode_chars, language, transform, B=
     return loader
 
 
-def get_val_decode_loader(chars, language, B=32, num_workers=2, style_id=0):
+def get_val_decode_loader(chars, language, B=32, num_workers=0, style_id=0):
     decode_dset = DecodeDataset(chars, language=language, style_id=style_id)
     loader = DataLoader(decode_dset, batch_size=B, shuffle=False, num_workers=num_workers)
 
