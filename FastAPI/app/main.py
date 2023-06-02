@@ -3,11 +3,13 @@ from zipfile import ZipFile
 from typing import Union
 
 from PIL import Image
+import base64
 
 
 from fastapi import FastAPI, Response, status
 from fastapi.responses import StreamingResponse, FileResponse, JSONResponse, HTMLResponse
-from utils import *
+from pydantic import BaseModel
+from utils import make_font, from_image_to_bytes, png2svg
 
 from glob import glob
 import os
@@ -41,6 +43,30 @@ async def svg_translation(name: str):
     print(name)
     png2svg(name)
     return {"message" : "Success"}  
+
+
+class ImageData(BaseModel):
+    imagebase64: str
+
+@app.post("/font_generation_with_total_image/{name}")
+async def svg_translation(name : str, image_data:ImageData) :
+    image_bytes = base64.b64decode(image_data.imagebase64)
+    image = Image.open(BytesIO(image_bytes)) 
+    image_width, image_height = image.size
+    subimage_width = image_width // 7
+    subimage_height = image_height // 4
+
+    for row in range(4):
+        for col in range(7):
+            left = col * subimage_width
+            top = row * subimage_height
+            right = left + subimage_width
+            bottom = top + subimage_height
+
+            subimage = image.crop((left, top, right, bottom))
+            subimage.save(f"./dmfont/custom_generate_image/test/subimage_{row}_{col}.png")
+
+    return {"message" : "success"}
 
 
     
