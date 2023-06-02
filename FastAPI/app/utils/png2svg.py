@@ -9,7 +9,7 @@ from multiprocessing import Pool
 from pathlib import Path
 
 def make_svg(st_step_name_tuple):
-    st, step, name = st_step_name_tuple
+    st, step, name, font_name = st_step_name_tuple
     image_dir = Path(f"./dmfont/custom_generate_image/{name}/png")
     images = glob(os.path.join(image_dir, "*.png"))
     images = [image_path.rsplit("/", 2) for image_path in images]
@@ -27,14 +27,14 @@ def make_svg(st_step_name_tuple):
         print(char_name)
         subprocess.run(["convert", png_path, pnm_path])
         subprocess.run(["potrace",pnm_path, "-s", "-o", svg_path])
-def png2svg(name):
-    os.makedirs(Path(f"./dmfont/custom_generate_image/{name}/png/"), exist_ok=True)
-    os.makedirs(Path(f"./dmfont/custom_generate_image/{name}/pnm/"), exist_ok=True)
-    os.makedirs(Path(f"./dmfont/custom_generate_image/{name}/svg/"), exist_ok=True)
+def png2svg(name, font_name):
+    # os.makedirs(Path(f"./dmfont/custom_generate_image/{name}/{font_name}/png/"), exist_ok=True)
+    # os.makedirs(Path(f"./dmfont/custom_generate_image/{name}/{font_name}/pnm/"), exist_ok=True)
+    # os.makedirs(Path(f"./dmfont/custom_generate_image/{name}/{font_name}/svg/"), exist_ok=True)
     Step = 3
     pool = Pool(processes=Step)
     print(pool, "이거 풀임")
-    pool.map(make_svg, zip(range(Step), [Step] * Step , [name] * Step))
+    pool.map(make_svg, zip(range(Step), [Step] * Step , [name] * Step, [font_name] * Step))
     pool.close()
     pool.join()
     return {"message" : "Sucess"}

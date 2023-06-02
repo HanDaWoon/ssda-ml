@@ -49,8 +49,8 @@ async def svg_translation(name: str):
 class ImageData(BaseModel):
     imagebase64: str
 
-@app.post("/font_generation_with_total_image/{name}")
-async def svg_translation(name : str, image_data:ImageData) :
+@app.post("/font_generation_with_total_image/{name}/{font_name}")
+async def svg_translation(font_name: str, name : str, image_data:ImageData) :
     image_bytes = base64.b64decode(image_data.imagebase64)
     image = Image.open(BytesIO(image_bytes)) 
     image_width, image_height = image.size
@@ -58,7 +58,9 @@ async def svg_translation(name : str, image_data:ImageData) :
     subimage_height = image_height // 4
 
     kor_list = ["가","긧", "깩", "낐", "냒", "댕", "댻", "땾", "떤", "랯", "렍", "멐", "멶", "벹", "볟", "뽈", "셮", "솱", "쇎", "쏗", "욃", "죬",    "쭕", "춾", "퀧", "튐", "퓹", "흢"]
-    os.makedirs(f"./dmfont/custom_generate_image/{name}/png", exist_ok = True)
+    os.makedirs(f"./dmfont/custom_generate_image/{name}/{font_name}/png", exist_ok = True)
+    os.makedirs(f"./dmfont/custom_generate_image/{name}/{font_name}/pnm", exist_ok = True)
+    os.makedirs(f"./dmfont/custom_generate_image/{name}/{font_name}/svg", exist_ok = True)
     for idx, kor in zip(range(28),kor_list):
         row = idx // 7
         col = idx % 4
@@ -69,12 +71,12 @@ async def svg_translation(name : str, image_data:ImageData) :
 
         subimage = image.crop((left, top, right, bottom))
         kor = unicodedata.normalize('NFC', kor) # ~~~/가
-        subimage.save(f"./dmfont/custom_generate_image/test/png/{name}_{ord(kor):04X}.png")
+        subimage.save(f"./dmfont/custom_generate_image/{name}/{font_name}/png/{name}_{ord(kor):04X}.png")
     
-    make_font("test")
-    png2svg("test")
+    make_font(name, font_name)
+    png2svg(name, font_name)
     ret_list = []
-    for png_path in glob(os.path.join(f"/root/ml/FastAPI/app/dmfont/custom_generate_image/{name}/svg", "*")):
+    for png_path in glob(os.path.join(f"/root/ml/FastAPI/app/dmfont/custom_generate_image/{name}/{font_name}/svg", "*")):
         with open(png_path, "r") as f:
             svg_content = f.read()
             # 
