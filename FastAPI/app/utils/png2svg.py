@@ -10,7 +10,7 @@ from pathlib import Path
 
 def make_svg(st_step_name_tuple):
     st, step, name, font_name = st_step_name_tuple
-    image_dir = Path(f"./dmfont/custom_generate_image/{name}/png")
+    image_dir = Path(f"./dmfont/custom_generate_image/{name}/{font_name}/png")
     images = glob(os.path.join(image_dir, "*.png"))
     images = [image_path.rsplit("/", 2) for image_path in images]
     
