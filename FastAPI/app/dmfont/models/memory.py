@@ -6,9 +6,9 @@ MIT license
 import numpy as np
 import torch
 import torch.nn as nn
-from models.modules import split_dim, ConvBlock
-import datasets.kor_decompose as kor
-import datasets.thai_decompose as thai
+from dmfont.models.modules import split_dim, ConvBlock
+import dmfont.datasets.kor_decompose as kor
+import dmfont.datasets.thai_decompose as thai
 
 
 def comp_id_to_addr(ids, language):

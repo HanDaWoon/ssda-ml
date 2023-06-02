@@ -5,7 +5,7 @@ import numpy as np
 import requests
 import json
 import torch
-from models import MACore
+from dmfont.models import MACore
 from sconf import Config
 from pathlib import Path
 import numpy as np

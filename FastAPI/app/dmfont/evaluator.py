@@ -17,17 +17,17 @@ from tqdm import tqdm
 from sconf import Config
 
 from dmfont import utils
-from logger import Logger
+from dmfont.logger import Logger
 
-from models import MACore
-from datasets import uniform_sample
-from datasets import kor_decompose as kor
-from datasets import thai_decompose as thai
-from inference import (
+from dmfont.models import MACore
+from dmfont.datasets import uniform_sample
+from dmfont.datasets import kor_decompose as kor
+from dmfont.datasets import thai_decompose as thai
+from dmfont.inference import (
     infer, get_val_loader,
     infer_2stage, get_val_encode_loader, get_val_decode_loader
 )
-from ssim import SSIM, MSSSIM
+from dmfont.ssim import SSIM, MSSSIM
 
 
 def torch_eval(val_fn):

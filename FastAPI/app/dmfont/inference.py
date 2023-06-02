@@ -5,8 +5,8 @@ MIT license
 """
 import torch
 from torch.utils.data import DataLoader
-from datasets import get_ma_val_dataset
-from datasets.nonpaired_dataset import EncodeDataset, DecodeDataset
+from dmfont.datasets import get_ma_val_dataset
+from dmfont.datasets.nonpaired_dataset import EncodeDataset, DecodeDataset
 from tqdm.auto import tqdm
 
 def infer(gen, loader):
