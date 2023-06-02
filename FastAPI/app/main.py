@@ -1,10 +1,12 @@
+import os
+import re
 from io import BytesIO
 from zipfile import ZipFile
 from typing import Union
 
 from PIL import Image
 import base64
-
+import unicodedata
 
 from fastapi import FastAPI, Response, status
 from fastapi.responses import StreamingResponse, FileResponse, JSONResponse, HTMLResponse
@@ -12,7 +14,6 @@ from pydantic import BaseModel
 from utils import make_font, from_image_to_bytes, png2svg
 
 from glob import glob
-import os
 
 app = FastAPI()
 
@@ -56,17 +57,39 @@ async def svg_translation(name : str, image_data:ImageData) :
     subimage_width = image_width // 7
     subimage_height = image_height // 4
 
-    for row in range(4):
-        for col in range(7):
-            left = col * subimage_width
-            top = row * subimage_height
-            right = left + subimage_width
-            bottom = top + subimage_height
+    kor_list = ["가","긧", "깩", "낐", "냒", "댕", "댻", "땾", "떤", "랯", "렍", "멐", "멶", "벹", "볟", "뽈", "셮", "솱", "쇎", "쏗", "욃", "죬",    "쭕", "춾", "퀧", "튐", "퓹", "흢"]
+    os.makedirs(f"./dmfont/custom_generate_image/{name}/png", exist_ok = True)
+    for idx, kor in zip(range(28),kor_list):
+        row = idx // 7
+        col = idx % 4
+        left = col * subimage_width
+        top = row * subimage_height
+        right = left + subimage_width
+        bottom = top + subimage_height
 
-            subimage = image.crop((left, top, right, bottom))
-            subimage.save(f"./dmfont/custom_generate_image/test/subimage_{row}_{col}.png")
-
-    return {"message" : "success"}
+        subimage = image.crop((left, top, right, bottom))
+        kor = unicodedata.normalize('NFC', kor) # ~~~/가
+        subimage.save(f"./dmfont/custom_generate_image/test/png/{name}_{ord(kor):04X}.png")
+    
+    make_font("test")
+    png2svg("test")
+    ret_list = []
+    for png_path in glob(os.path.join(f"/root/ml/FastAPI/app/dmfont/custom_generate_image/{name}/svg", "*")):
+        with open(png_path, "r") as f:
+            svg_content = f.read()
+            # 
+            pattern = r'<svg.*?</svg>'
+            match = re.search(pattern, svg_content, re.DOTALL)
+            if match:
+                svg_match = match.group()
+                print(svg_match)
+                ret_list.append(svg_match)
+    
+    print(ret_list)
+    ret = "\n".join(ret_list)
+    with open("./output.svg", "w") as f:
+        f.write(ret)
+    return {"message" : ret}
 
 
     

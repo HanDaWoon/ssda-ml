@@ -15,17 +15,22 @@ def make_svg(st_step_name_tuple):
     images = [image_path.rsplit("/", 2) for image_path in images]
     
     for image_path, png, char_name in tqdm(images[st::step]):
+        
     # Numpy 배열을 임시 파일로 저장
-        char_name = char_name[:8]
+        char_name = char_name[:len(name) + 5]
         png_path = os.path.join(image_path, "png", f"{char_name}.png")
         pnm_path = os.path.join(image_path, "pnm", f"{char_name}.pnm")
         svg_path = os.path.join(image_path, "svg", f"{char_name}.svg")
+        print(png_path)
+        print(pnm_path)
+        print(svg_path)
+        print(char_name)
         subprocess.run(["convert", png_path, pnm_path])
         subprocess.run(["potrace",pnm_path, "-s", "-o", svg_path])
 def png2svg(name):
     os.makedirs(Path(f"./dmfont/custom_generate_image/{name}/png/"), exist_ok=True)
-    os.makedirs(Path(f"./dmfont/custom_generate_image/{name}/pnm"), exist_ok=True)
-    os.makedirs(Path(f"./dmfont/custom_generate_image/{name}/svg"), exist_ok=True)
+    os.makedirs(Path(f"./dmfont/custom_generate_image/{name}/pnm/"), exist_ok=True)
+    os.makedirs(Path(f"./dmfont/custom_generate_image/{name}/svg/"), exist_ok=True)
     Step = 3
     pool = Pool(processes=Step)
     print(pool, "이거 풀임")
