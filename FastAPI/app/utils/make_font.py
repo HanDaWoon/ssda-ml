@@ -24,11 +24,11 @@ import os
 
 def make_font(name, font_name):
     # cfg = Config("./dmfont/cfgs/kor_custom.yaml") # Full Character Generation
-    cfg = Config("./dmfont/cfgs/kor_custom_test.yaml")
+    cfg = Config("./dmfont/cfgs/kor_custom_test_inference.yaml")
     logger = Logger.get()
     cfg['name'] = name
     cfg['font_name'] = font_name
-    cfg['data_dir'] = Path(os.path.join(cfg['data_dir'], name, font_name))
+    cfg['data_dir'] = Path(os.path.join(cfg['data_dir'], name))
 
     np.random.seed(cfg['seed'])
     torch.manual_seed(cfg['seed'])

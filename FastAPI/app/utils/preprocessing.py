@@ -117,7 +117,7 @@ class FontProcessor(object):
             TODO : 이미 폰트가 존재할 때의 exception 과정 필요
             if dump_path.exists():
         """
-        char_paths = sorted(glob(os.path.join("../DB", user, font_name, "original_split", '*')))
+        char_paths = sorted(glob(os.path.join(self.root, user, font_name, "original_split", '*')))
         # pprint(char_paths)
         # print(len(char_paths)) 
         # print()

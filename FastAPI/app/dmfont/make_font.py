@@ -19,11 +19,12 @@ import utils
 import os
 
 
-def make_font(name):
+def make_font(name, font_name):
     cfg = Config("./cfgs/kor_custom_make_font.yaml")
+    cfg['font_name'] = font_name
     logger = Logger.get()
-    cfg['data_dir'] = Path(os.path.join(cfg['data_dir'], cfg['name']))
     cfg['name'] = name
+    # cfg['data_dir'] = Path(os.path.join(cfg['data_dir'], cfg['name']))
     np.random.seed(cfg['seed'])
     torch.manual_seed(cfg['seed'])
     random.seed(cfg['seed'])
