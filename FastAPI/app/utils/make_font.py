@@ -46,8 +46,10 @@ def make_font(name, font_name):
     hdf5_data, meta = setup_data(cfg, transform)
     
     # setup dataset
+    meta['train']['fonts'] = [font_name]
+    meta['valid']['fonts'] = [font_name]
     trn_dset, loader = get_dset_loader(
-        hdf5_data, meta['train']['fonts'], meta['train']['chars'], transform, True, cfg,
+        hdf5_data, meta['train']['fonts'], meta['valid']['chars'], transform, True, cfg,
         content_font=content_font
     )
     # TODO : val_loader customize

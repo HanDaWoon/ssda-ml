@@ -1,9 +1,9 @@
 {
-  "target_chars": "한준재익",
+  "target_chars": "소연수아재익한준재훈",
   "style_chars": "가긧깩낐냒댕댻땾떤렍멐멶벹볟뽈셮솱쇎쏗욃죬쭕춾퀧튐퓹흢",
   "train":{
     "fonts": [
-      "test"    
+      "MSY"    
     ],
     "chars" :[
       "가",
@@ -38,7 +38,7 @@
   },
   "valid" : {
     "fonts": [
-      "test"    
+      "MSY"    
     ],
     "chars":[
         "한",

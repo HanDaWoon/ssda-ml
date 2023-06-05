@@ -8,6 +8,11 @@ from tqdm.auto import tqdm
 from multiprocessing import Pool
 from pathlib import Path
 
+def char2kor(char_name):
+    hex_value = int(char_name, 16)
+    return chr(hex_value)
+    
+
 def make_svg(st_step_name_tuple):
     st, step, name, font_name = st_step_name_tuple
     image_dir = Path(f"./DB/{name}/{font_name}/png")
@@ -22,6 +27,7 @@ def make_svg(st_step_name_tuple):
         png_path = os.path.join(image_path, "png", f"{char_name}.png")
         pnm_path = os.path.join(image_path, "pnm", f"{char_name}.pnm")
         svg_path = os.path.join(image_path, "svg", f"{char_name}.svg")
+        # svg_path = os.path.join(image_path, "svg", f"{char_name}_{char2kor(char_name.split('_')[-1])}.svg")
         print(png_path)
         print(pnm_path)
         print(svg_path)
