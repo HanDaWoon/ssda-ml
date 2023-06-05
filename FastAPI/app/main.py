@@ -11,13 +11,13 @@ import unicodedata
 from fastapi import FastAPI, Response, status
 from fastapi.responses import StreamingResponse, FileResponse, JSONResponse, HTMLResponse
 from pydantic import BaseModel
-from utils import make_font, from_image_to_bytes, png2svg
+from utils import make_font, from_image_to_bytes, png2svg, preprocessing
 
 from glob import glob
 
 app = FastAPI()
 
-image_dir = "./dmfont/output/images"
+image_dir = "./DB"
 
 
 @app.get("/")
@@ -27,18 +27,36 @@ async def root():
 # TODO: 나중에는 이 name이 uuid 같은 hash 값으로 변경되면 됨.
 
 
-@app.get("/font_generation/images/{name}/{font_name}")
-async def font_generation(name: str, font_name : str):
-    make_font(name, font_name)
-    print(os.path.abspath(image_dir))
-    image_paths = glob(os.path.join(image_dir, name, "*.png"))
+@app.get("/font_generation/images/{user_name}/{font_name}")
+async def font_generation(user_name: str, font_name : str):
+    preprocessing.make_splitted_images(user_name, font_name)  
+    # make_splitted_images 끝났음을 알리는 백엔드 서버로의 post 혹은 get request 문 추가.
+    make_font(user_name, font_name)
+    # make_font 끝났음을 알리는 백엔드 서버로의 post 혹은 get request 문 추가.
+    print(os.path.abspath(image_dir), "image_dir")
+    image_paths = glob(os.path.join(image_dir, user_name, "*.png"))
     print(image_paths[:5])
     img_list = {}
+    png2svg(user_name, font_name)
+    # png2svg 끝났음을 알리는 백엔드 서버로의 post 혹은 get request 문 추가.
+    ret_list = []
+    for png_path in glob(os.path.join(f"./DB/{user_name}/{font_name}/svg", "*")):
+        with open(png_path, "r") as f:
+            svg_content = f.read()
+            #
+            pattern = r'<svg.*?</svg>'
+            match = re.search(pattern, svg_content, re.DOTALL)
+            if match:
+                svg_match = match.group()
+                print(svg_match)
+                ret_list.append(svg_match)
 
-    for image_path in image_paths:
-        char_name = str(image_path.split('_')[-1][:4])
-        img_list[char_name] = from_image_to_bytes(Image.open(image_path))
-    return JSONResponse(img_list)
+    print(ret_list)
+    ret = "\n".join(ret_list)
+    with open("./output.svg", "w") as f:
+        f.write(ret)
+    return {"message": ret}
+
 
 
 @app.get("/font_generation/png2svg/{name}")

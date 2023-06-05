@@ -10,7 +10,8 @@ from pathlib import Path
 
 def make_svg(st_step_name_tuple):
     st, step, name, font_name = st_step_name_tuple
-    image_dir = Path(f"./dmfont/custom_generate_image/{name}/{font_name}/png")
+    image_dir = Path(f"./DB/{name}/{font_name}/png")
+    print(image_dir, "png2svg.make_svg.image_dir")
     images = glob(os.path.join(image_dir, "*.png"))
     images = [image_path.rsplit("/", 2) for image_path in images]
     
@@ -28,9 +29,9 @@ def make_svg(st_step_name_tuple):
         subprocess.run(["convert", png_path, pnm_path])
         subprocess.run(["potrace",pnm_path, "-s", "-o", svg_path])
 def png2svg(name, font_name):
-    # os.makedirs(Path(f"./dmfont/custom_generate_image/{name}/{font_name}/png/"), exist_ok=True)
-    # os.makedirs(Path(f"./dmfont/custom_generate_image/{name}/{font_name}/pnm/"), exist_ok=True)
-    # os.makedirs(Path(f"./dmfont/custom_generate_image/{name}/{font_name}/svg/"), exist_ok=True)
+    os.makedirs(Path(f"./DB/{name}/{font_name}/png/"), exist_ok=True)
+    os.makedirs(Path(f"./DB/{name}/{font_name}/pnm/"), exist_ok=True)
+    os.makedirs(Path(f"./DB/{name}/{font_name}/svg/"), exist_ok=True)
     Step = 3
     pool = Pool(processes=Step)
     print(pool, "이거 풀임")

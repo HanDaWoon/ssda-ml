@@ -46,7 +46,7 @@ def dump_to_hdf5(dump_path, font_name, images, chars, compression=None):
         
         
 class FontProcessor(object):
-    def __init__(self, language, root_dir = '../DB', resize_method="bilinear", font_size_factor=2, sample_size=128):
+    def __init__(self, language, root_dir = './DB', resize_method="bilinear", font_size_factor=2, sample_size=128):
         if language != "kor":
             assert False, 'Please input Korean language'
         
@@ -90,23 +90,6 @@ class FontProcessor(object):
 
         return rendercheckedchars
 
-    def get_charsize(self, char, font):
-        char = self.fix_char_order_if_thai(char)
-        size_x, size_y = font.getsize(char)
-        offset_x, offset_y = font.getoffset(char)
-
-        return size_x-offset_x, size_y-offset_y
-    
-    def render_center_no_offset(self, char, font, fontmaxsize, size=128, margin=0):
-        char = self.fix_char_order_if_thai(char)
-        size_x, size_y = font.getsize(char)
-        offset_x, offset_y = font.getoffset(char)
-        roi_w = size_x-offset_x
-        roi_h = size_y-offset_y
-        img = Image.open()
-
-        return img
-    
     
     def dump_fonts(self, user, font_name, compression=None):        
         dump_path = os.path.join(self.root_dir, user, font_name)
@@ -117,16 +100,16 @@ class FontProcessor(object):
             TODO : 이미 폰트가 존재할 때의 exception 과정 필요
             if dump_path.exists():
         """
-        char_paths = sorted(glob(os.path.join(self.root, user, font_name, "original_split", '*')))
-        # pprint(char_paths)
-        # print(len(char_paths)) 
-        # print()
-        # pprint(input_chars)
-        # print(len(input_chars))
+        char_paths = sorted(glob(os.path.join(self.root_dir, user, font_name, "original_split", '*')))
+        pprint(char_paths)
+        print(len(char_paths)) 
+        print()
+        pprint(input_chars)
+        print(len(input_chars))
         images = []
         chars = []
         for char_path, char in tqdm(zip(char_paths, input_chars)):
-            print(char_path)
+            print(char_path, "char_path")
             img = Image.open(char_path).convert("L")
             img = img.resize((128,128), 2)
             images.append(img)
@@ -134,12 +117,15 @@ class FontProcessor(object):
             
         dump_to_hdf5(os.path.join(dump_path, f"{font_name}.hdf5"), font_name, images, chars, compression=compression)
             
-        
-def main(language, user, font_name):
+def make_splitted_images(user_name, font_name, language = "kor"):
     processor = FontProcessor(language)
-    processor.dump_fonts(user, font_name)
+    processor.dump_fonts(user_name, font_name)
+        
+# def main(user, font_name, language = "kor"):
+#     processor = FontProcessor(language)
+#     processor.dump_fonts(user, font_name)
 
 
-if __name__ == '__main__':
-    fire.Fire(main)
+# if __name__ == '__main__':
+#     fire.Fire(main)
       

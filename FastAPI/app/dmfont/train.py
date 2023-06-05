@@ -126,7 +126,7 @@ def setup_data(cfg, val_transform):
         meta_data (dict)
     """
     hdf5_paths = list(cfg['data_dir'].glob("*.hdf5"))
-    print(hdf5_paths)
+    print(hdf5_paths, "- hdf5_paths")
     print(cfg['data_dir'], "- cfg['data_dir']")
     hdf5_data = HDF5Data(hdf5_paths, val_transform, language=cfg['language'])
 

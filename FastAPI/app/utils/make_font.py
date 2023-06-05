@@ -1,6 +1,6 @@
 import sys
 sys.path.append("./dmfont")
-print(sys.path)
+print(sys.path, "-sys.path")
 import numpy as np
 import requests
 import json
@@ -26,10 +26,10 @@ def make_font(name, font_name):
     # cfg = Config("./dmfont/cfgs/kor_custom.yaml") # Full Character Generation
     cfg = Config("./dmfont/cfgs/kor_custom_test_inference.yaml")
     logger = Logger.get()
-    cfg['name'] = name
+    cfg['name'] = name 
     cfg['font_name'] = font_name
-    cfg['data_dir'] = Path(os.path.join(cfg['data_dir'], name))
-
+    cfg['data_dir'] = Path(os.path.join(cfg['data_dir'], name, font_name)) # 실제 hdf5 data가 저장된 root dir
+    cfg['save_dir'] = Path(os.path.join(cfg['save_dir']), name, font_name) # 실제 추론된 png파일이 저장될 root dir
     np.random.seed(cfg['seed'])
     torch.manual_seed(cfg['seed'])
     random.seed(cfg['seed'])
@@ -82,6 +82,7 @@ def make_font(name, font_name):
     fonts = meta['train']['fonts']
     logger.info("Start generation & saving kor-unrefined ...")
     save_dir = Path(cfg['save_dir'])
+    print(save_dir, "save_dir")
     evaluator.handwritten_validation_2stage(
       gen,step, fonts, style_chars, target_chars, comparable=True, save_dir=save_dir
     )

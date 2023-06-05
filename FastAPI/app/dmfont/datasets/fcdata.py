@@ -38,7 +38,7 @@ class HDF5Data(FCData):
 
         # chars: union of all chars
         for path in hdf5_paths:
-            print(path, "-path")
+            print(path, "-fcdata-path")
             with h5.File(path, 'r') as f:
                 font_name = f['dataset'].attrs['font_name']
                 self.fn2path[font_name] = path
