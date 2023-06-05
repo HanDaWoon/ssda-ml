@@ -28,7 +28,7 @@ def make_font(name, font_name):
     logger = Logger.get()
     cfg['name'] = name
     cfg['font_name'] = font_name
-    cfg['data_dir'] = Path(os.path.join(cfg['data_dir'], cfg['name'], cfg['font_name']))
+    cfg['data_dir'] = Path(os.path.join(cfg['data_dir'], name, font_name))
 
     np.random.seed(cfg['seed'])
     torch.manual_seed(cfg['seed'])
@@ -50,7 +50,7 @@ def make_font(name, font_name):
         hdf5_data, meta['train']['fonts'], meta['train']['chars'], transform, True, cfg,
         content_font=content_font
     )
-    # TODO : val_loader 역할?
+    # TODO : val_loader customize
     val_loaders = setup_cv_dset_loader(
         hdf5_data, meta, transform, n_comp_types, content_font, cfg
     )

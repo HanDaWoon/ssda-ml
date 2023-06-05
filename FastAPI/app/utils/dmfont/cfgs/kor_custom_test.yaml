@@ -1,5 +1,5 @@
 # train
-data_dir: dmfont/data
+data_dir: ../DB
 data_meta: dmfont/meta/kor_split_custom_test.json
 resume : dmfont/checkpoints/korean-handwriting.pth
 language: kor

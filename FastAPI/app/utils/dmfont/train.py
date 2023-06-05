@@ -3,6 +3,7 @@ DMFont
 Copyright (c) 2020-present NAVER Corp.
 MIT license
 """
+import os
 import sys
 import json
 from pathlib import Path
@@ -124,7 +125,8 @@ def setup_data(cfg, val_transform):
         data (HDF5Data)
         meta_data (dict)
     """
-    hdf5_paths = list(cfg['data_dir'].glob("*.hdf5"))
+    root_data_dir = os.path.join(cfg['data_dir'],cfg['name'], cfg['font_name'])
+    hdf5_paths = list(root_data_dir.glob("*.hdf5"))
     hdf5_data = HDF5Data(hdf5_paths, val_transform, language=cfg['language'])
 
     # setup meta data

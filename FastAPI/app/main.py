@@ -27,9 +27,9 @@ async def root():
 # TODO: 나중에는 이 name이 uuid 같은 hash 값으로 변경되면 됨.
 
 
-@app.get("/font_generation/images/{name}")
-async def font_generation(name: str):
-    make_font(name)
+@app.get("/font_generation/images/{name}/{font_name}")
+async def font_generation(name: str, font_name : str):
+    make_font(name, font_name)
     print(os.path.abspath(image_dir))
     image_paths = glob(os.path.join(image_dir, name, "*.png"))
     print(image_paths[:5])
@@ -61,7 +61,7 @@ async def svg_translation(font_name: str, name: str, image_data: ImageData):
     subimage_height = image_height // 4
 
     kor_list = ["가", "긧", "깩", "낐", "냒", "댕", "댻", "땾", "떤", "랯", "렍", "멐", "멶",
-                "벹", "볟", "뽈", "셮", "솱", "쇎", "쏗", "욃", "죬",    "쭕", "춾", "퀧", "튐", "퓹", "흢"]
+                "벹", "볟", "뽈", "셮", "솱", "쇎", "쏗", "욃", "죬", "쭕", "춾", "퀧", "튐", "퓹", "흢"]
     os.makedirs(
         f"./dmfont/custom_generate_image/{name}/{font_name}/png", exist_ok=True)
     os.makedirs(

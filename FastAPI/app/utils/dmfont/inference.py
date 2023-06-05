@@ -67,6 +67,9 @@ def infer_2stage(gen, encode_loader, decode_loader, reset_memory=True):
 
 def get_val_encode_loader(data, font_name, encode_chars, language, transform, B=32, num_workers=0,
                           style_id=0):
+    """
+        encode_chars : 입력으로 주어지는 character(즉 우리가 관찰할 glyphs)
+    """
     encode_dset = EncodeDataset(
         font_name, encode_chars, data, language=language, transform=transform, style_id=style_id
     )
