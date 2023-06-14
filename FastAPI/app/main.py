@@ -10,6 +10,7 @@ import unicodedata
 
 from fastapi import FastAPI, Response, status
 from fastapi.responses import StreamingResponse, FileResponse, JSONResponse, HTMLResponse
+from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from utils import make_font, from_image_to_bytes, png2svg, preprocessing
 
@@ -127,12 +128,12 @@ async def svg_translation(font_name: str, name: str, image_data: ImageData):
         subimage = image.crop((left, top, right, bottom))
         kor = unicodedata.normalize('NFC', kor)  # ~~~/가
         subimage.save(
-            f"./dmfont/custom_generate_image/{name}/{font_name}/png/{name}_{ord(kor):04X}.png")
+            f"./dmfont/custom_generate_image/{name}/{font_name}/sp/{name}_{ord(kor):04X}.png")
 
     # make_font(name, font_name)
     png2svg(name, font_name)
     ret_list = []
-    for png_path in glob(os.path.join(f"/root/ml/FastAPI/app/dmfont/custom_generate_image/{name}/{font_name}/svg", "*")):
+    for png_path in glob(os.path.join(f"./DB/{name}/{font_name}/svg", "*")):
         with open(png_path, "r") as f:
             svg_content = f.read()
             #
@@ -148,3 +149,14 @@ async def svg_translation(font_name: str, name: str, image_data: ImageData):
     with open("./output.svg", "w") as f:
         f.write(ret)
     return {"message": ret}
+
+@app.post("/sentence_request/{name}/{font_name}")
+async def svg_translation(name: str, font_name:str, sentence: str):
+    ret = []
+    for character in sentence:
+        with open(f"./DB/{name}/{font_name}/svg/{font_name}_{ord(character):04X}.svg", 'r') as f:
+            svg_string = f.read()
+        ret.append(svg_string)
+    ret = "\n".join(ret)
+    print(ret)
+    return jsonable_encoder({"sentence" : ret})
