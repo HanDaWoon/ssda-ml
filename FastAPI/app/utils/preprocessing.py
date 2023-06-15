@@ -16,7 +16,7 @@ from pprint import pprint
 import unicodedata as uni
 from tqdm.auto import tqdm
 from fontTools.ttLib import TTFont
-input_chars = sorted(["가", "긧", "깩", "낐", "냒", "댕", "댻", "땾", "떤", "랯", "렍", "멐", "멶", "벹", "볟", "뽈", "셮", "솱", "쇎", "쏗", "욃", "죬", "쭕", "춾", "퀧", "튐", "퓹", "흢"],key=lambda x : ord(uni.normalize('NFC', x)))
+input_chars = sorted(["가", "긧", "깩", "낐", "냒", "댕", "댻", "땾", "떤", "렍", "멐", "멶", "벹", "볟", "뽈", "셮", "솱", "쇎", "쏗", "욃", "죬", "쭕", "춾", "퀧", "튐", "퓹", "흢", "챷"],key=lambda x : ord(uni.normalize('NFC', x)))
 
 CODE_RANGE = {
     'kor': [[0x0021, 0x007E], [0x3131, 0x3163], [0xAC00, 0xD7A3]],
@@ -101,6 +101,7 @@ class FontProcessor(object):
             if dump_path.exists():
         """
         char_paths = sorted(glob(os.path.join(self.root_dir, user, font_name, "original_splitted", '*')))
+        print(len(char_paths))
         # pprint(char_paths)
         # print(len(char_paths)) 
         # print()
@@ -109,12 +110,14 @@ class FontProcessor(object):
         images = []
         chars = []
         for char_path, char in tqdm(zip(char_paths, input_chars)):
-            print(char_path, "char_path")
+            print(char_path, char, "char_path")
+            
             img = Image.open(char_path).convert("L")
             img = img.resize((128,128), 2)
             images.append(img)
             chars.append(self.ord(uni.normalize('NFC', char)))
             
+        print(os.path.join(dump_path, f"{font_name}.hdf5"), "-saved_hdf5")
         dump_to_hdf5(os.path.join(dump_path, f"{font_name}.hdf5"), font_name, images, chars, compression=compression)
             
 def make_splitted_images(user_name, font_name, language = "kor"):

@@ -38,7 +38,7 @@ def png2svg(name, font_name):
     os.makedirs(Path(f"./DB/{name}/{font_name}/png/"), exist_ok=True)
     os.makedirs(Path(f"./DB/{name}/{font_name}/pnm/"), exist_ok=True)
     os.makedirs(Path(f"./DB/{name}/{font_name}/svg/"), exist_ok=True)
-    Step = 3
+    Step = 40
     pool = Pool(processes=Step)
     print(pool, "이거 풀임")
     pool.map(make_svg, zip(range(Step), [Step] * Step , [name] * Step, [font_name] * Step))

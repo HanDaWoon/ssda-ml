@@ -1,6 +1,6 @@
 # train
 data_dir: DB
-data_meta: dmfont/meta/kor_split_custom_test_Inference.json
+data_meta: dmfont/meta/kor_split_custom.json
 resume : dmfont/checkpoints/korean-handwriting.pth
 language: kor
 save_dir : DB

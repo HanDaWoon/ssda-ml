@@ -39,16 +39,18 @@ async def font_generation(user_name: str, font_name : str, image_data: ImageData
     subimage_width = image_width // 7
     subimage_height = image_height // 4
 
-    kor_list = ["가", "긧", "깩", "낐", "냒", "댕", "댻", "땾", "떤", "랯", "렍", "멐", "멶",
-                "벹", "볟", "뽈", "셮", "솱", "쇎", "쏗", "욃", "죬", "쭕", "춾", "퀧", "튐", "퓹", "흢"]
+    kor_list = ["가", "긧", "깩", "낐", "냒", "댕", "댻", "땾", "떤", "렍", "멐", "멶",
+                "벹", "볟", "뽈", "셮", "솱", "쇎", "쏗", "욃", "죬", "쭕", "춾", "퀧", "튐", "퓹", "흢", "챷"]
     os.makedirs(
-        f"./DB//{user_name}/{font_name}/original_splitted", exist_ok=True)
+        f"./DB/{user_name}/{font_name}/original_splitted", exist_ok=True)
     os.makedirs(
-        f"./DB//{user_name}/{font_name}/png", exist_ok=True)
+        f"./DB/{user_name}/{font_name}/original_splitted_name", exist_ok=True)
     os.makedirs(
-        f"./DB//{user_name}/{font_name}/pnm", exist_ok=True)
+        f"./DB/{user_name}/{font_name}/png", exist_ok=True)
     os.makedirs(
-        f"./DB//{user_name}/{font_name}/svg", exist_ok=True)
+        f"./DB/{user_name}/{font_name}/pnm", exist_ok=True)
+    os.makedirs(
+        f"./DB/{user_name}/{font_name}/svg", exist_ok=True)
     for idx, kor in zip(range(28), kor_list):
         row = idx // 7
         col = idx % 7
@@ -62,6 +64,8 @@ async def font_generation(user_name: str, font_name : str, image_data: ImageData
         kor = unicodedata.normalize('NFC', kor)  # ~~~/가
         subimage.save(
             f"./DB/{user_name}/{font_name}/original_splitted/{user_name}_{ord(kor):04X}.png")
+        subimage.save(
+            f"./DB/{user_name}/{font_name}/original_splitted_name/{user_name}_{kor}.png")
     preprocessing.make_splitted_images(user_name, font_name)  
     # make_splitted_images 끝났음을 알리는 백엔드 서버로의 post 혹은 get request 문 추가.
     make_font(user_name, font_name)
@@ -89,7 +93,7 @@ async def font_generation(user_name: str, font_name : str, image_data: ImageData
     with open("./output.svg", "w") as f:
         f.write(ret)
     return {"message": ret}
-
+ 
 
 
 @app.get("/font_generation/png2svg/{name}")

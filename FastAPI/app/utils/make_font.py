@@ -1,13 +1,13 @@
 import sys
-sys.path.append("./dmfont")
-print(sys.path, "-sys.path")
+# sys.path.append("./dmfont")
+# print(sys.path, "-sys.path")
 import numpy as np
 import requests
 import json
 import torch
 from dmfont.models import MACore
 from sconf import Config
-from pathlib import Path
+from pathlib import Path 
 import numpy as np
 import random
 from evaluator import Evaluator
