@@ -69,7 +69,6 @@ class DynamicMemory(nn.Module):
         for style_id, comp_addrs_per_char in zip(style_ids, comp_addrs):
             char_feats = []
             for comp_addr in comp_addrs_per_char:
-                # print(comp_addr, "-comp_addr")
                 comp_feat = self.read_point(style_id, comp_addr, reduction)
                 char_feats.append(comp_feat)
 
@@ -86,8 +85,6 @@ class DynamicMemory(nn.Module):
 
     def read_point(self, style_id, comp_addr, reduction='mean'):
         """ Point read """
-        # print(sorted(self.memory[0].keys()), "self.memory.shape")
-        # print(style_id.item(), comp_addr.item(), "-style_id.item(), comp_addr.item()")
         comp_feats = self.memory[style_id.item()][comp_addr.item()]
         return self.reduce_features(comp_feats, reduction)
 
@@ -178,7 +175,6 @@ class Memory(nn.Module):
     def write(self, style_ids, comp_ids, comp_feats):
         """ Write data into dynamic memory """
         comp_addrs = comp_id_to_addr(comp_ids, self.language)
-        # print(comp_addrs, "comp_addrs")
         self.dynamic_memory.write(style_ids, comp_addrs, comp_feats)
 
     def read(self, style_ids, comp_ids):

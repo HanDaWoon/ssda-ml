@@ -102,16 +102,9 @@ class FontProcessor(object):
         """
         char_paths = sorted(glob(os.path.join(self.root_dir, user, font_name, "original_splitted", '*')))
         print(len(char_paths))
-        # pprint(char_paths)
-        # print(len(char_paths)) 
-        # print()
-        # pprint(input_chars)
-        # print(len(input_chars))
         images = []
         chars = []
         for char_path, char in tqdm(zip(char_paths, input_chars)):
-            print(char_path, char, "char_path")
-            
             img = Image.open(char_path).convert("L")
             img = img.resize((128,128), 2)
             images.append(img)

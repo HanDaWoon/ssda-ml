@@ -1,6 +1,5 @@
 import sys
-# sys.path.append("./dmfont")
-# print(sys.path, "-sys.path")
+sys.path.append("./dmfont")
 import numpy as np
 import requests
 import json
@@ -81,10 +80,11 @@ def make_font(name, font_name):
     meta = json.load(open(Path(cfg['data_meta'])))
     target_chars = meta['target_chars']
     style_chars = meta['style_chars']
+    meta['train']['fonts'] = [font_name]
+    meta['valid']['fonts'] = [font_name]
     fonts = meta['train']['fonts']
     logger.info("Start generation & saving kor-unrefined ...")
     save_dir = Path(cfg['save_dir'])
-    print(save_dir, "save_dir")
     evaluator.handwritten_validation_2stage(
       gen,step, fonts, style_chars, target_chars, comparable=True, save_dir=save_dir
     )

@@ -265,7 +265,6 @@ class Evaluator:
             save_dir.mkdir(parents=True, exist_ok=True)
 
         outs = []
-        print(fonts)
         for font_name in fonts:
             encode_loader = get_val_encode_loader(
                 self.data, font_name, style_chars, self.language, self.transform
@@ -278,7 +277,6 @@ class Evaluator:
                 for char, glyph in zip(target_chars, out):
                     uni = "".join([f'{ord(each):04X}' for each in char])
                     path = save_dir/ "png" / "{}_{}.png".format(font_name, uni)
-                    # print(path, " - evaluator/path")
                     path.parent.mkdir(parents=True, exist_ok=True)
                     utils.save_tensor_to_image(glyph, path)
 

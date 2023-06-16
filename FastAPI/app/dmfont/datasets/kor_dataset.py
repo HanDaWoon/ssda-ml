@@ -324,7 +324,6 @@ def get_ma_dataset(hdf5_data, avail_fonts, avail_chars=None, transform=None, **k
 
     avails = {}
     for fname in avail_fonts:
-        print(fname, "- fname")
         chars = hdf5_data.get_avail_chars(fname)
         if avail_chars:
             chars = set(chars) & avail_chars
