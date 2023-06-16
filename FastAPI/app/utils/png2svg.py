@@ -33,6 +33,7 @@ def png2svg(user_name, font_name):
     os.makedirs(Path(f"./DB/{user_name}/{font_name}/svg/"), exist_ok=True)
     Step = 20
     pool = Pool(processes=Step)
+    print(pool, "이거 풀임")
     pool.map(make_svg, zip(range(Step), [Step] * Step , [user_name] * Step, [font_name] * Step))
     pool.close()
     pool.join()

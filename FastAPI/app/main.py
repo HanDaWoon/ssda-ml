@@ -40,8 +40,8 @@ async def font_generation(user_name: str, font_name : str, image_data: ImageData
     subimage_width = image_width // 7
     subimage_height = image_height // 4
 
-    kor_list = ["가", "긧", "깩", "낐", "냒", "댕", "댻", "땾", "떤", "렍", "멐", "멶",
-                "벹", "볟", "뽈", "셮", "솱", "쇎", "쏗", "욃", "죬", "쭕", "춾", "퀧", "튐", "퓹", "흢", "챷"]
+    kor_list = ["가", "긧", "깩", "낐", "냒", "댕", "댻", "땾", "떤", "춾", "렍", "멐", "멶",
+                "벹", "볟", "뽈", "셮", "솱", "쇎", "쏗", "욃", "죬", "쭕", "퀧", "튐", "퓹", "흢", "챷"]
     os.makedirs(
         f"./DB/{user_name}/{font_name}/original_splitted", exist_ok=True)
     os.makedirs(
@@ -101,8 +101,6 @@ async def svg_translation(user_name: str, font_name:str, sentence: str):
     for character in sentence:
         with open(f"./DB/{user_name}/{font_name}/svg/{font_name}_{ord(character):04X}.svg", 'r') as f:
             svg_string = f.read()
-            # svg_string = svg_string.replace('\n',' ')
-            # svg_string = svg_string.replace('\\',' ')
         ret.append(svg_string)
     ret = "\n".join(ret)
     print(ret)
