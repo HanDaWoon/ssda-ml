@@ -50,3 +50,4 @@ Thumbs.db
 *.svg
 *.png
 *.pnm
+FastAPI/app/dmfont/data/fonts-hdf5/NanumBarunpenR.hdf5
